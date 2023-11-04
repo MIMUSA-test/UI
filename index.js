@@ -1,6 +1,7 @@
 // const mimusa_python_code_URL = "https://mimusa-test-model.onrender.com/generate"
-// const mimusa_python_code_URL = "https://54.151.190.12:8000/generate"
-const mimusa_python_code_URL = "https://model.socialopinionanalytics.net/generate"
+const mimusa_python_code_URL = "http://127.0.0.1:8000/generate"
+const mimusa2_python_code_URL = "http://127.0.0.1:8000/generate2"
+// const mimusa_python_code_URL = "https://model.socialopinionanalytics.net/generate"
 
 const app = Vue.createApp({
 
@@ -8,7 +9,6 @@ const app = Vue.createApp({
     data() {
         return {
             original_text: "",
-            score: "",
             sentiment: "",
             final_text: "",
         }
@@ -28,23 +28,25 @@ const app = Vue.createApp({
                 })
                 .then(response => response.json())
                 .then(data => {
-                    this.score = data.data;
+                    this.sentiment = data.data;
                     this.final_text = data.text;
-                    if (this.score == -2) {
-                        this.sentiment = "Strongly Negative"
-                    }
-                    else if (this.score == -1) {
-                        this.sentiment = "Negative"
-                    }
-                    else if (this.score == 0) {
-                        this.sentiment = "Neutral"
-                    }
-                    else if (this.score == 1) {
-                        this.sentiment = "Positive"
-                    }
-                    else if (this.score == 2) {
-                        this.sentiment = "Strongly Positive"
-                    }
+                    // console.log(data);
+                });
+        },
+        get_score2() {
+            console.log(this.original_text);
+            fetch(`${mimusa2_python_code_URL}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "text/plain"
+                    },
+                    body: this.original_text
+                })
+                .then(response => response.json())
+                .then(data => {
+                    this.sentiment = data.data;
+                    this.final_text = data.text;
                     // console.log(data);
                 });
         },
